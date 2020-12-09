@@ -1,5 +1,5 @@
 #!/bin/bash
-# AXE Masternode Setup Script V2.0 for Ubuntu 16.04 LTS
+# HTH Masternode Setup Script V2.0 for Ubuntu 18.04 LTS
 #
 # Script will attempt to auto detect primary public IP address
 # and generate masternode private key unless specified in command line
@@ -26,17 +26,17 @@ function delay { echo -e "${GREEN}Sleep for $1 seconds...${NC}"; sleep "$1"; }
 
 #Stop daemon if it's already running
 function stop_daemon {
-    if pgrep -x 'axed' > /dev/null; then
+    if pgrep -x 'helpthehomelessd' > /dev/null; then
         echo -e "${YELLOW}Attempting to stop axed${NC}"
-        axe-cli stop
+        helpthehomeless-cli stop
         delay 30
-        if pgrep -x 'axe' > /dev/null; then
-            echo -e "${RED}axed daemon is still running!${NC} \a"
+        if pgrep -x 'hth' > /dev/null; then
+            echo -e "${RED}helpthehomelessd daemon is still running!${NC} \a"
             echo -e "${RED}Attempting to kill...${NC}"
-            pkill axed
+            pkill helpthehomelessd
             delay 30
-            if pgrep -x 'axed' > /dev/null; then
-                echo -e "${RED}Can't stop axed! Reboot and try again...${NC} \a"
+            if pgrep -x 'helpthehomelessd' > /dev/null; then
+                echo -e "${RED}Can't stop helpthehomelessd! Reboot and try again...${NC} \a"
                 exit 2
             fi
         fi
@@ -48,7 +48,7 @@ function stop_daemon {
  if [[ $(lsb_release -d) == *16.04* ]]; then
    UBUNTU_VERSION=16
 else
-   echo -e "${RED}You are not running Ubuntu 16.04, Installation is cancelled.${NC}"
+   echo -e "${RED}You are not running Ubuntu 18.04, Installation is cancelled.${NC}"
    exit 1
 
 fi
@@ -57,7 +57,7 @@ fi
 genkey=$3
 #Enter the new BLS genkey
 clear
-echo -e "${YELLOW}AXE Coin DIP003 Masternode Setup Script V2 for Ubuntu 16.04 LTS${NC}"
+echo -e "${YELLOW}AXE Coin DIP003 Masternode Setup Script V2 for Ubuntu 18.04 LTS${NC}"
 	read -e -p "Enter your BLS key:" genkey3;
               read -e -p "Confirm your BLS key: " genkey4;
 
@@ -157,22 +157,22 @@ rpcpassword=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 
 #Installing Daemon
  cd ~
-wget https://github.com/AXErunners/axe/releases/download/v1.6.1.1/axecore-1.6.1.1-x86_64-linux-gnu.tar.gz
-tar -xzf axecore-1.6.1.1-x86_64-linux-gnu.tar.gz -C ~/AXE-MN-setup
-rm -rf axecore-1.6.1.1-x86_64-linux-gnu.tar.gz
+wget https://github.com/HTHcoin/helpthehomelesscoin/releases/download/0.14.08/homeless-0.14.08-ubuntu18.tar.gz
+tar -xzf homeless-0.14.08-ubuntu18.tar.gz -C ~/HTH-MN-setup
+rm -rf homeless-0.14.08-ubuntu18.tar.gz
 
 stop_daemon
  
  # Deploy binaries to /usr/bin
- sudo rm ~/AXE-MN-setup/axecore-1.6.1.1/bin/axe-qt
- sudo rm ~/AXE-MN-setup/axecore-1.6.1.1/bin/test*
- sudo cp ~/AXE-MN-setup/axecore-1.6.1.1/bin/axe* /usr/bin/
- sudo chmod 755 -R ~/AXE-MN-setup
- sudo chmod 755 /usr/bin/axe*
+ sudo cp ~/HTH-MN-setup/helpthehomelessd /usr/bin/
+ sudo cp ~/HTH-MN-setup/helpthehomeless-cli /usr/bin/
+ sudo chmod 755 -R ~/HTH-MN-setup
+ sudo chmod 755 /usr/bin/helpthehomelessd
+ sudo chmod 755 /usr/bin/helpthehomeless-cli
  
  # Deploy masternode monitoring script
- cp ~/AXE-MN-setup/axemon.sh /usr/local/bin
- sudo chmod 711 /usr/local/bin/axemon.sh
+ cp ~/HTH-MN-setup/hthmon.sh /usr/local/bin
+ sudo chmod 711 /usr/local/bin/hthmon.sh
  
  #Create axe datadir
  if [ ! -f ~/.axecore/axe.conf ]; then 
